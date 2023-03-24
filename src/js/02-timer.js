@@ -2,6 +2,8 @@ import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
+import Notiflix, { Notify } from 'notiflix';
+
 const inputDate = document.querySelector('#datetime-picker');
 
 const startButton = document.querySelector('button[data-start]');
@@ -28,7 +30,7 @@ const options = {
     selectDate = selectedDates[0];
 
     if (selectDate < new Date()) {
-      alert('Please choose a date in the future');
+      Notify.failure('Please choose a date in the future');
       return;
     }
     startButton.disabled = false;
@@ -65,17 +67,21 @@ function handlerClickStartButton() {
 }
 
 function updateTimer({ days, hours, minutes, seconds }) {
-  timerDays.textContent = days;
+  timerDays.textContent = pad(days);
 
-  timerHours.textContent = hours;
+  timerHours.textContent = pad(hours);
 
-  timerMinutes.textContent = minutes;
+  timerMinutes.textContent = pad(minutes);
 
-  timerSeconds.textContent = seconds;
+  timerSeconds.textContent = pad(seconds);
 
   if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
     timerOver = true;
   }
+}
+
+function pad(value) {
+  return String(value).padStart(2, '0');
 }
 
 function convertMs(ms) {

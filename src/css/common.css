@@ -37,13 +37,12 @@ img {
 }
 
 input {
-  margin: auto;
-  height: 55px;
+  height: 60px;
   font-size: 30px;
 }
 
 button {
-  width: 100px;
-  height: 60px;
+  width: 140px;
+  height: 80px;
   font-size: 30px;
 }
