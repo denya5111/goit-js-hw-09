@@ -16,8 +16,6 @@ const timerMinutes = document.querySelector('span[data-minutes]');
 
 const timerSeconds = document.querySelector('span[data-seconds]');
 
-let timerOver = false;
-
 let selectDate = null;
 
 const options = {
@@ -46,24 +44,28 @@ startButton.addEventListener('click', handlerClickStartButton);
 function handlerClickStartButton() {
   startButton.disabled = true;
 
+  options.clickOpens = false;
+
+  flatpickr(inputDate, options);
+
   const timerIntervalId = setInterval(() => {
-    if (timerOver) {
-      clearInterval(timerIntervalId);
+    if (selectDate.getTime() - new Date().getTime() < 1000) {
+      stopInterval(timerIntervalId);
 
-      timerOver = false;
-
-      options.clickOpens = true;
-
-      flatpickr(inputDate, options);
+      updateTimer(convertMs(0));
 
       return;
     }
     updateTimer(convertMs(selectDate.getTime() - new Date().getTime()));
-
-    options.clickOpens = false;
-
-    flatpickr(inputDate, options);
   }, 1000);
+}
+
+function stopInterval(ID) {
+  clearInterval(ID);
+
+  options.clickOpens = true;
+
+  flatpickr(inputDate, options);
 }
 
 function updateTimer({ days, hours, minutes, seconds }) {
@@ -74,10 +76,6 @@ function updateTimer({ days, hours, minutes, seconds }) {
   timerMinutes.textContent = pad(minutes);
 
   timerSeconds.textContent = pad(seconds);
-
-  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-    timerOver = true;
-  }
 }
 
 function pad(value) {
